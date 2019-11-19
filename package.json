@@ -17,12 +17,13 @@
     "start": "node ./index.js",
     "gcp-build": "tsc -p .",
     "deploy": "gcloud app deploy",
-    "buildAndStart" : "tsc -p . && node ./index.js"
+    "buildAndStart": "tsc -p . && node ./index.js"
   },
   "dependencies": {
     "express": "^4.16.3",
     "typescript": "^3.0.1",
-    "axios": "^0.19.0"
+    "axios": "^0.19.0",
+    "dotenv": "^8.2.0"
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "^3.3.0",
