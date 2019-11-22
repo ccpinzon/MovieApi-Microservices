@@ -1,4 +1,4 @@
-import {getMoviesBySearch, getTrendingMovies, testManager} from "./managers/api.manager"
+import * as apiManager from "./managers/api.manager"
 import * as express from "express";
 import {timeWindowEnum} from "./models/timeWindow.enum";
 
@@ -9,13 +9,13 @@ const app = express();
 app.get("/", async (req, res) => {
   //res.send("🎉 Hello TypeScript! 🎉");
 
-  const response = await testManager();
+  const response = await apiManager.testManager();
   res.send(response);
 });
 
 app.get("/movies/trending/:time" , async (req, res) => {
 
-  let timeAux = timeWindowEnum.WEEK
+  let timeAux:timeWindowEnum = timeWindowEnum.WEEK
   if (req.path){
     console.log('path -> ' + JSON.stringify(req.path))
     if (req.path === timeWindowEnum.WEEK.toString()){
@@ -25,7 +25,7 @@ app.get("/movies/trending/:time" , async (req, res) => {
     }
   }
   try {
-    const response = await getTrendingMovies(timeAux)
+    const response = await apiManager.getTrendingMovies(timeAux)
     res.send(response)
   }catch (e) {
     console.error(e)
@@ -34,20 +34,33 @@ app.get("/movies/trending/:time" , async (req, res) => {
 })
 
 app.get("/movies/search/", async (req, res) => {
-  let textToSearch = ""
+  let textToSearch:string = ""
 
   if (req.query){
     textToSearch = req.query.text
     console.log("Text to search in movie api -> " + textToSearch)
 
     try {
-      const response = await getMoviesBySearch(textToSearch)
+      const response = await apiManager.getMoviesBySearch(textToSearch)
       res.send(response)
     }catch (e) {
       console.error(e)
       res.status(400).send(e)
     }
 
+  }
+
+})
+
+app.get("/movies/:id", async (req, res) => {
+
+  try {
+    const idMovie: number = Number(req.params.id)
+    const response = await apiManager.getMovieById(idMovie)
+    res.send(response)
+  }catch (e) {
+    console.error(e)
+    res.status(400).send(e)
   }
 
 })

@@ -51,11 +51,6 @@ export async function getTrendingMovies( timeWindow:timeWindowEnum = timeWindowE
 
     const url = baseUrl + context + time
     console.log("url -> " + url)
-/*    const params = {
-        api_key : API_KEY,
-        page: page,
-        language: "es-CO"
-    }*/
 
     const params = {
         ...paramsBase,
@@ -148,6 +143,44 @@ export async function getMoviesBySearch(textToSearch: string) : Promise<Object>{
     return response
 
 }
+
+export async function getMovieById(idMovie: number) :Promise<Object>{
+    // https://api.themoviedb.org/3/movie/384018?api_key=7888561a6eff93666be6d54db238535e&language=es-CO
+    const context = "movie/"
+    console.log("idMovie - > " + idMovie)
+    //const url = baseUrl + context + idMovie
+    const url = `${baseUrl + context + idMovie} `
+
+    const params = {
+        ...paramsBase
+    }
+    console.log("url -> " + url)
+    let jsonRes: any = {}
+    let response: Object = {}
+    try {
+        const apiGetTest = await axios.get(url,{params:params})
+        jsonRes = apiGetTest.data
+    }catch (e) {
+        console.error("errorrequest -> " + e);
+    }
+
+    if (jsonRes){
+        const posterImage = await generateUrlImage(jsonRes.poster_path)
+        let movie = {
+            id:  jsonRes.id,
+            score: jsonRes.vote_average,
+            title: jsonRes.title,
+            date: jsonRes.release_date,
+            resume: jsonRes.overview,
+            genre: (jsonRes.genres[0] && jsonRes.genres[0].name) ? jsonRes.genres[0].name : undefined,
+            posterImage: posterImage
+        }
+        response = movie
+    }
+
+    return response
+}
+
 
 
 async function generateUrlImage( imagePath:string ) : Promise<string> {
