@@ -1,4 +1,4 @@
-import {getTrendingMovies, testManager} from "./managers/api.manager";
+import {getMoviesBySearch, getTrendingMovies, testManager} from "./managers/api.manager"
 import * as express from "express";
 import {timeWindowEnum} from "./models/timeWindow.enum";
 
@@ -15,7 +15,6 @@ app.get("/", async (req, res) => {
 
 app.get("/movies/trending/:time" , async (req, res) => {
 
-  // TODO: FIX DAY AND WEEK PATH! OR USE QUERY IS MORE EASY
   let timeAux = timeWindowEnum.WEEK
   if (req.path){
     console.log('path -> ' + JSON.stringify(req.path))
@@ -32,6 +31,25 @@ app.get("/movies/trending/:time" , async (req, res) => {
     console.error(e)
     res.status(400).send(e)
   }
+})
+
+app.get("/movies/search/", async (req, res) => {
+  let textToSearch = ""
+
+  if (req.query){
+    textToSearch = req.query.text
+    console.log("Text to search in movie api -> " + textToSearch)
+
+    try {
+      const response = await getMoviesBySearch(textToSearch)
+      res.send(response)
+    }catch (e) {
+      console.error(e)
+      res.status(400).send(e)
+    }
+
+  }
+
 })
 
 app.listen(PORT, () => {

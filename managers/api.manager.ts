@@ -12,5 +12,11 @@ export async function getTrendingMovies( time: timeWindowEnum = timeWindowEnum.W
     return await movieApi.getTrendingMovies(time,page)
 }
 
+export async function getMoviesBySearch(textToSearch: string = "") : Promise<Object> {
+
+    return await movieApi.getMoviesBySearch(textToSearch);
+    
+}
+
 
 
