@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # [START gae_python37_app]
-from flask import Flask
-
+from flask import Flask, jsonify
+from managers import algolia_manager as manager
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
@@ -24,7 +24,13 @@ app = Flask(__name__)
 @app.route('/')
 def hello():
     """Return a friendly HTTP greeting."""
-    return 'Hello World!'
+    return 'Flask Api Google AppEngine'
+
+
+@app.route('/user', methods=['POST'])
+def create_user():
+    res = manager.create_anonymous_user()
+    return jsonify(res)
 
 
 if __name__ == '__main__':

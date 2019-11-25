@@ -1,14 +1,15 @@
 import Axios from "axios"
 import * as envs from "../enviroments"
-import {timeWindowEnum} from "../models/timeWindow.enum";
-import {json} from "express"
-
+import {timeWindowEnum} from "../models/timeWindow.enum"
+import {SizeEnum} from "../models/size.enum"
 
 
 const axios = Axios
 
 const baseUrl = envs.baseUrlTheMovieApi
 const baseUrlImages = envs.baseUrlImages
+const sizeImageBig = envs.BigSizeImage
+const sizeImageSmall = envs.BigSmallImage
 const API_KEY = process.env.API_KEY
 
 const paramsBase = {
@@ -166,6 +167,7 @@ export async function getMovieById(idMovie: number) :Promise<Object>{
 
     if (jsonRes){
         const posterImage = await generateUrlImage(jsonRes.poster_path)
+        const backgroundImage = await generateUrlImage(jsonRes.backdrop_path, SizeEnum.BIG)
         let movie = {
             id:  jsonRes.id,
             score: jsonRes.vote_average,
@@ -173,7 +175,9 @@ export async function getMovieById(idMovie: number) :Promise<Object>{
             date: jsonRes.release_date,
             resume: jsonRes.overview,
             genre: (jsonRes.genres[0] && jsonRes.genres[0].name) ? jsonRes.genres[0].name : undefined,
-            posterImage: posterImage
+            posterImage: posterImage,
+            backgroundImage: backgroundImage,
+            webUrl: jsonRes.homepage
         }
         response = movie
     }
@@ -183,10 +187,13 @@ export async function getMovieById(idMovie: number) :Promise<Object>{
 
 
 
-async function generateUrlImage( imagePath:string ) : Promise<string> {
+async function generateUrlImage( imagePath:string, size:SizeEnum = SizeEnum.SMALL ) : Promise<string> {
     if (imagePath) {
         //console.log('generate image url to -> ' + imagePath)
-        return baseUrlImages + (imagePath.replace('/', '').replace('\'', ''))
+        let imageSizeUrl = sizeImageBig
+        imageSizeUrl = (size === SizeEnum.BIG) ? sizeImageBig : sizeImageSmall
+        const url = baseUrlImages + imageSizeUrl + '/'
+        return url + (imagePath.replace('/', '').replace('\'', ''))
     }
    return undefined
 }
