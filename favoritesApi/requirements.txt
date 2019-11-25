@@ -1,1 +1,2 @@
 Flask==1.1.1
+algoliasearch==1.17.0

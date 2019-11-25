@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import main
+import uuid
 
 
 def test_index():
@@ -22,3 +23,11 @@ def test_index():
     r = client.get('/')
     assert r.status_code == 200
     assert 'Hello World' in r.data.decode('utf-8')
+
+
+def test_generate_uuid():
+    uuid_gen = uuid.uuid4()
+    print('uuid -> ' + str(uuid_gen))
+
+
+test_generate_uuid()

@@ -8,7 +8,7 @@ const PORT = Number(process.env.PORT) || 8080;
 const app = express();
 
 app.use(cors({origin: true}))
-app.get("/", async (req, res) => {
+app.get("/", async (req, res) =>{
   //res.send("🎉 Hello TypeScript! 🎉");
 
   const response = await apiManager.testManager();
@@ -18,15 +18,19 @@ app.get("/", async (req, res) => {
 app.get("/movies/trending/:time" , async (req, res) => {
 
   let timeAux:timeWindowEnum = timeWindowEnum.WEEK
-  if (req.path){
-    console.log('path -> ' + JSON.stringify(req.path))
-    if (req.path === timeWindowEnum.WEEK.toString()){
+  console.log('path params -> ' + JSON.stringify(req.params))
+  if (req.params.time){
+
+    const paramTime = req.params.time
+
+    if (paramTime === timeWindowEnum.WEEK.toString()){
       timeAux = timeWindowEnum.WEEK
-    }else if (req.path === timeWindowEnum.DAY.toString()) {
+    }else if (paramTime === timeWindowEnum.DAY.toString()) {
       timeAux = timeWindowEnum.DAY
     }
   }
   try {
+    console.log('find by -> ' + timeAux)
     const response = await apiManager.getTrendingMovies(timeAux)
     res.send(response)
   }catch (e) {
