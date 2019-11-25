@@ -17,7 +17,7 @@
     "start": "node ./index.js",
     "gcp-build": "tsc -p .",
     "deploy": "gcloud app deploy",
-    "appEngineDeploy" : "npm run gcp-build && gcloud app deploy -v version1 --project=movieapp-microservices",
+    "appEngineDeploy": "npm run gcp-build && gcloud app deploy -v version1 --project=movieapp-microservices",
     "buildAndStart": "tsc -p . && ts-node ./index.ts"
   },
   "dependencies": {
@@ -25,7 +25,8 @@
     "typescript": "^3.0.1",
     "axios": "^0.19.0",
     "dotenv": "^8.2.0",
-    "ts-node": "^8.5.2"
+    "ts-node": "^8.5.2",
+    "cors": "latest"
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "^3.3.0",
