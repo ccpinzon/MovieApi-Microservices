@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # [START gae_python37_app]
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
 from managers import algolia_manager as manager
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
@@ -30,6 +30,24 @@ def hello():
 @app.route('/user', methods=['POST'])
 def create_user():
     res = manager.create_anonymous_user()
+    return jsonify(res)
+
+
+@app.route('/movie/favorite', methods=['POST'])
+def save_favorite_movie():
+    data = request.get_json()
+    user_id = data.get("idUser")
+    movie_id = data.get("idMovie")
+    res = manager.set_movie_favorite(user_id, movie_id)
+    return jsonify(res)
+
+
+@app.route('/movie/toSee', methods=['POST'])
+def save_to_see_movie():
+    data = request.get_json()
+    user_id = data.get("idUser")
+    movie_id = data.get("idMovie")
+    res = manager.set_movie_to_see(user_id, movie_id)
     return jsonify(res)
 
 
