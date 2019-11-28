@@ -1,5 +1,6 @@
 from algoliasearch import algoliasearch
 from common import constants as cons
+import requests
 import uuid
 
 client = algoliasearch.Client(cons.APP_ID, cons.APY_KEY)
@@ -19,6 +20,15 @@ def generate_object_id(user_id, movie_id):
     return None
 
 
+def get_movie_info(movie_id):
+    if movie_id:
+        res = requests.get("https://movieapp-microservices.appspot.com/movies/" + str(movie_id))
+        if res and res.json():
+            print(str(res.json()))
+            return res.json()
+    return None
+
+
 def add_movie_to_user(obj_to_save):
     res = {
         "code": "Error",
@@ -31,6 +41,7 @@ def add_movie_to_user(obj_to_save):
             movie_id = str(obj_to_save['movieId'])
 
             obj_to_save["objectID"] = generate_object_id(user_id, movie_id)
+            obj_to_save["movieInfo"] = get_movie_info(movie_id)
             index.partial_update_object(obj_to_save)
             res["code"] = "OK"
             res["message"] = "Saved Movie"
