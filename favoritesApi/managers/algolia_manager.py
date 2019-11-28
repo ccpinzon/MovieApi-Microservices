@@ -71,3 +71,27 @@ def set_movie_favorite(user_id, movie_id):
             "favorite": True
         }
     return add_movie_to_user(object_to_save)
+
+
+def clean_algolia_data(response_algolia):
+    movies_list = []
+    for hit in response_algolia['hits']:
+        movie = hit['movieInfo']
+        movies_list.append(movie)
+    return movies_list
+
+
+def get_movies_from_user(user_id, type_filter_movie):
+    obj_res = {
+        "userId": str(user_id),
+        "filterBy": str(type_filter_movie)
+    }
+    query_filter = 'userId:"' + str(user_id) + '" AND ' + str(type_filter_movie) + ':True'
+    print('filter algolia -> ' + str(query_filter))
+    res = index.search('', {
+        'filters': str(query_filter)
+    })
+
+    obj_res["movies"] = clean_algolia_data(res)
+
+    return obj_res

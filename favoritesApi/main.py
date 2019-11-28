@@ -51,6 +51,18 @@ def save_to_see_movie():
     return jsonify(res)
 
 
+@app.route('/user/movies/toSee/<user_id>', methods=['GET'])
+def get_to_see_movie(user_id):
+    res = manager.get_movies_from_user(user_id, "toSee")
+    return jsonify(res)
+
+
+@app.route('/user/movies/favorite/<user_id>', methods=['GET'])
+def get_favorites_movie(user_id):
+    res = manager.get_movies_from_user(user_id, "favorite")
+    return jsonify(res)
+
+
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
     # Engine, a webserver process such as Gunicorn will serve the app. This
