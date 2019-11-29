@@ -1,0 +1,7 @@
+/node_modules/
+.idea/
+/index.js
+/models/timeWindow.enum.js
+/externalApis/movieAPI.js
+/managers/api.manager.js
+/enviroments.js
