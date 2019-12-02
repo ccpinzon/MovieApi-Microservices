@@ -4,7 +4,7 @@ const express = require("express");
 const envs = require("../enviroments");
 const apiAdapter = require("./api.adapter");
 exports.router = express.Router();
-const api = apiAdapter(envs.baseUrlTheMovieApi);
+const api = apiAdapter.apiAdapter(envs.baseUrlTheMovieApi);
 // services
 const getTrendingMovies = "/movies/trending";
 const getMovieById = "/movies";

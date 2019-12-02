@@ -1,11 +1,10 @@
 import * as express from "express";
 import * as envs from "../enviroments"
-
-const apiAdapter = require("./api.adapter")
+import * as apiAdapter from "./api.adapter"
 
 export const router = express.Router()
 
-const api = apiAdapter(envs.baseUrlTheMovieApi)
+const api = apiAdapter.apiAdapter(envs.baseUrlTheMovieApi)
 
 // services
 
