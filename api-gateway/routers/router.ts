@@ -1,15 +1,14 @@
 import * as express from "express";
+import * as movieApi from "./movieapi.service"
+import * as favoriteApi from "./favoriteapi.service"
 
-const router = express.Router()
-
-const movieApi = require('./movieapi.service')
-const favoriteApi = require('./favoriteapi.service')
+export const router = express.Router()
 
 router.use((req,res,next) => {
     console.log(`Call Service -> ${req.path}`)
     next()
 })
 
-router.use(movieApi)
-router.use(favoriteApi)
-module.exports = router
+router.use(movieApi.router)
+router.use(favoriteApi.router)
+
