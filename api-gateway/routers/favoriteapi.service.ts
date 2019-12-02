@@ -12,6 +12,8 @@ const api = apiAdapter(envs.baseUrlFavoriteApi)
 const getToSee = "/user/movies/toSee"
 const getFavorites = "/user/movies/favorite"
 const createUser = "/user"
+const saveFavoriteMovie = "/movie/favorite"
+const saveToSee = "/movie/toSee"
 
 api.interceptors.request.use((request) => {
     console.log(`Starting | Request OMS -> ${JSON.stringify(request)}`);
@@ -80,6 +82,56 @@ router.post(createUser, (req, res) => {
 
 })
 
+/**
+ *  save favorite movie
+ */
+
+router.post(createUser, (req, res) => {
+
+
+    api.post(req.path, {
+        // enviar parametros
+        params: req.query,
+    }).then((resp) => {
+        res.send(resp.data);
+    }).catch((error) => {
+        res.status(error.response.status);
+        res.send(error.response.data);
+        res.status(400).send('Something broke!');
+    });
+
+})
+
+/**
+ * save favorite movie
+ */
+
+router.post(saveFavoriteMovie, (req, res) => {
+    const { body } = req;
+    api.post(req.path, body).then((resp) => {
+        res.send(resp.data);
+    }).catch((error) => {
+        res.status(error.response.status);
+        res.send(error.response.data);
+        res.status(400).send('Something broke!');
+    });
+
+})
+/**
+ * save toSee Movie
+ */
+
+router.post(saveToSee, (req, res) => {
+    const { body } = req;
+    api.post(req.path, body).then((resp) => {
+        res.send(resp.data);
+    }).catch((error) => {
+        res.status(error.response.status);
+        res.send(error.response.data);
+        res.status(400).send('Something broke!');
+    });
+
+})
 
 
 
