@@ -2,6 +2,7 @@ import * as apiManager from "./managers/api.manager"
 import * as express from "express"
 import {timeWindowEnum} from "./models/timeWindow.enum"
 import * as cors from 'cors'
+import {TypeMovieEnum} from "./models/typeMovie.enum";
 
 const PORT = Number(process.env.PORT) || 8080
 
@@ -19,7 +20,11 @@ app.get("/", async (req, res) => {
     res.send(response)
 })
 
-app.get("/movies/trending/:time", async (req, res) => {
+
+/**
+ * trending movies and show tv
+ */
+app.get("/:type/trending/:time", async (req, res) => {
 
     let timeAux: timeWindowEnum = timeWindowEnum.WEEK
     console.log('path params -> ' + JSON.stringify(req.params))
@@ -35,7 +40,13 @@ app.get("/movies/trending/:time", async (req, res) => {
     }
     try {
         console.log('find by -> ' + timeAux)
-        const response = await apiManager.getTrendingMovies(timeAux)
+        const typeMovie = req.params.type
+        let response = await apiManager.getTrendingMovies(timeAux)
+        if (typeMovie === TypeMovieEnum.MOVIE.toString() ) {
+            response = await apiManager.getTrendingMovies(timeAux)
+        }else if ( typeMovie === TypeMovieEnum.TV.toString() ){
+            response = await apiManager.getTrendingTv(timeAux)
+        }
         res.send(response)
     } catch (e) {
         console.error(e)
@@ -43,7 +54,13 @@ app.get("/movies/trending/:time", async (req, res) => {
     }
 })
 
-app.get("/movies/search/", async (req, res) => {
+
+
+
+/**
+ * search movies or series
+ */
+app.get("/:type/search/", async (req, res) => {
     let textToSearch: string = ""
 
     if (req.query) {
@@ -51,7 +68,14 @@ app.get("/movies/search/", async (req, res) => {
         console.log("Text to search in movie api -> " + textToSearch)
 
         try {
-            const response = await apiManager.getMoviesBySearch(textToSearch)
+            const typeMovie = req.params.type
+            let response;
+            if ( typeMovie === TypeMovieEnum.MOVIE.toString() ){
+                response = await apiManager.getMoviesBySearch(textToSearch)
+            }else if ( typeMovie === TypeMovieEnum.TV.toString() ) {
+                response = await apiManager.getTvsBySearch(textToSearch)
+            }
+
             //console.log('response ->' + JS0ON.stringify(response))
             res.setHeader('Content-Type', 'application/json');
             res.json(response)
@@ -68,11 +92,17 @@ app.get("/movies/search/", async (req, res) => {
 
 })
 
-app.get("/movies/:id", async (req, res) => {
+app.get("/:type/:id", async (req, res) => {
 
     try {
-        const idMovie: number = Number(req.params.id)
-        const response = await apiManager.getMovieById(idMovie)
+        const typeMovie = req.params.type
+        const id: number = Number(req.params.id)
+        let response;
+        if ( typeMovie === TypeMovieEnum.MOVIE.toString() ){
+            response = await apiManager.getMovieById(id)
+        }else if ( typeMovie === TypeMovieEnum.TV.toString() ) {
+            response = await apiManager.getTvById(id)
+        }
         res.send(response)
     } catch (e) {
         console.error(e)
@@ -80,6 +110,8 @@ app.get("/movies/:id", async (req, res) => {
     }
 
 })
+
+
 
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`)

@@ -43,11 +43,12 @@ export async function getTestApi(): Promise<Object> {
     return dataMovie
 }
 
-export async function getTrendingMovies( timeWindow:timeWindowEnum = timeWindowEnum.WEEK, page:number = 1 ) : Promise<Object> {
+// movies
+
+export async function getTrending(timeWindow:timeWindowEnum = timeWindowEnum.WEEK, page:number = 1 , context:string = "trending./movie" ) : Promise<Object> {
 
     // https://api.themoviedb.org/3/trending/movie/week?api_key=7888561a6eff93666be6d54db238535e&page=1
 
-    const context = "trending/movie/"
     const time = timeWindow.toString()
 
     const url = baseUrl + context + time
@@ -76,8 +77,8 @@ export async function getTrendingMovies( timeWindow:timeWindowEnum = timeWindowE
             movie = {
                 id:  movAux.id,
                 score: movAux.vote_average,
-                title: movAux.title,
-                date: movAux.release_date,
+                title: (movAux.title) ? movAux.title : movAux.original_name,
+                date:  ( movAux.release_date ) ? movAux.release_date : movAux.first_air_date ,
                 resume: movAux.overview,
                 posterImage: posterImage
             }
@@ -94,11 +95,10 @@ export async function getTrendingMovies( timeWindow:timeWindowEnum = timeWindowE
 
 }
 
-export async function getMoviesBySearch(textToSearch: string) : Promise<Object>{
+export async function getBySearch(textToSearch: string, context:string = "search/movie") : Promise<Object>{
 
    // https://api.themoviedb.org/3/search/movie?api_key=7888561a6eff93666be6d54db238535e&language=es-CO&query=marvel&page=1&include_adult=false
 
-    const context = "search/movie"
     const url = baseUrl + context
 
     const params = {
@@ -125,8 +125,8 @@ export async function getMoviesBySearch(textToSearch: string) : Promise<Object>{
             movie = {
                 id:  movAux.id,
                 score: movAux.vote_average,
-                title: movAux.title,
-                date: movAux.release_date,
+                title: (movAux.title) ? movAux.title : movAux.original_name,
+                date: ( movAux.release_date ) ? movAux.release_date : movAux.first_air_date ,
                 resume: movAux.overview,
                 posterImage: posterImage
                 //posterImage: movAux.poster_path
@@ -145,10 +145,9 @@ export async function getMoviesBySearch(textToSearch: string) : Promise<Object>{
 
 }
 
-export async function getMovieById(idMovie: number) :Promise<Object>{
+export async function getById(idMovie: number, context:string = "movie/" ) :Promise<Object>{
     // https://api.themoviedb.org/3/movie/384018?api_key=7888561a6eff93666be6d54db238535e&language=es-CO
-    const context = "movie/"
-    console.log("idMovie - > " + idMovie)
+    console.log("id - > " + idMovie)
     //const url = baseUrl + context + idMovie
     const url = `${baseUrl + context + idMovie} `
 
@@ -186,6 +185,7 @@ export async function getMovieById(idMovie: number) :Promise<Object>{
 }
 
 
+// others
 
 async function generateUrlImage( imagePath:string, size:SizeEnum = SizeEnum.SMALL ) : Promise<string> {
     if (imagePath) {
