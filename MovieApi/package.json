@@ -17,7 +17,7 @@
     "start": "node ./index.js",
     "gcp-build": "tsc -p .",
     "deploy": "gcloud app deploy",
-    "appEngineDeploy": "npm run gcp-build && gcloud app deploy -v version2 --project=movieapp-microservices",
+    "appEngineDeploy": "npm run gcp-build && gcloud app deploy -v version4 --project=movieapp-microservices",
     "buildAndStart": "tsc -p . && ts-node ./index.ts"
   },
   "dependencies": {

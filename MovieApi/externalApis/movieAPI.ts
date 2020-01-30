@@ -167,18 +167,18 @@ export async function getById(idMovie: number, context:string = "movie/" ) :Prom
     if (jsonRes){
         const posterImage = await generateUrlImage(jsonRes.poster_path)
         const backgroundImage = await generateUrlImage(jsonRes.backdrop_path, SizeEnum.BIG)
-        let movie = {
-            id:  jsonRes.id,
+        response = {
+            id: jsonRes.id,
             score: jsonRes.vote_average,
-            title: jsonRes.title,
-            date: jsonRes.release_date,
+            title: (jsonRes.title) ? jsonRes.title: jsonRes.name,
+            date: (jsonRes.release_date)? jsonRes.release_date : jsonRes.first_air_date,
             resume: jsonRes.overview,
             genre: (jsonRes.genres[0] && jsonRes.genres[0].name) ? jsonRes.genres[0].name : undefined,
             posterImage: posterImage,
             backgroundImage: backgroundImage,
+            context: context.replace('/',''),
             webUrl: jsonRes.homepage
         }
-        response = movie
     }
 
     return response
