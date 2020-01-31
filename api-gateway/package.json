@@ -16,7 +16,7 @@
     "lint": "tslint -p .",
     "start": "node ./index.js",
     "gcp-build": "tsc -p .",
-    "appEngineDeploy": "npm run gcp-build && gcloud app deploy -v version2 --project=movieapp-microservices",
+    "appEngineDeploy": "npm run gcp-build && gcloud app deploy -v version3 --project=movieapp-microservices",
     "buildAndStart": "tsc -p . && ts-node ./index.ts"
   },
   "dependencies": {
