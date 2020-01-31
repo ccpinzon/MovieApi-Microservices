@@ -38,7 +38,7 @@ def save_favorite_movie():
     data = request.get_json()
     user_id = data.get("idUser")
     movie_id = data.get("idMovie")
-    res = manager.set_movie_favorite(user_id, movie_id)
+    res = manager.set_movie_favorite(user_id, movie_id, "movie")
     return jsonify(res)
 
 
@@ -47,7 +47,25 @@ def save_to_see_movie():
     data = request.get_json()
     user_id = data.get("idUser")
     movie_id = data.get("idMovie")
-    res = manager.set_movie_to_see(user_id, movie_id)
+    res = manager.set_movie_to_see(user_id, movie_id, 'movie')
+    return jsonify(res)
+
+
+@app.route('/tv/toSee', methods=['POST'])
+def save_to_see_tv():
+    data = request.get_json()
+    user_id = data.get("idUser")
+    movie_id = data.get("idTv")
+    res = manager.set_movie_to_see(user_id, movie_id, 'tv')
+    return jsonify(res)
+
+
+@app.route('/tv/favorite', methods=['POST'])
+def save_favorite_tv():
+    data = request.get_json()
+    user_id = data.get("idUser")
+    movie_id = data.get("idTv")
+    res = manager.set_movie_favorite(user_id, movie_id, "tv")
     return jsonify(res)
 
 

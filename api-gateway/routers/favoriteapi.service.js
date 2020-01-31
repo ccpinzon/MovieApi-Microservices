@@ -11,6 +11,8 @@ const getFavorites = "/user/movies/favorite";
 const createUser = "/user";
 const saveFavoriteMovie = "/movie/favorite";
 const saveToSee = "/movie/toSee";
+const saveTvToFavorite = "/tv/favorite";
+const saveTvToSee = "/tv/toSee";
 api.interceptors.request.use((request) => {
     console.log(`Starting | Request OMS -> ${JSON.stringify(request)}`);
     return request;
@@ -94,9 +96,35 @@ exports.router.post(saveFavoriteMovie, (req, res) => {
     });
 });
 /**
+ * save favorite TV
+ */
+exports.router.post(saveTvToFavorite, (req, res) => {
+    const { body } = req;
+    api.post(req.path, body).then((resp) => {
+        res.send(resp.data);
+    }).catch((error) => {
+        res.status(error.response.status);
+        res.send(error.response.data);
+        res.status(400).send('Something broke!');
+    });
+});
+/**
  * save toSee Movie
  */
 exports.router.post(saveToSee, (req, res) => {
+    const { body } = req;
+    api.post(req.path, body).then((resp) => {
+        res.send(resp.data);
+    }).catch((error) => {
+        res.status(error.response.status);
+        res.send(error.response.data);
+        res.status(400).send('Something broke!');
+    });
+});
+/**
+ * save toSee Tv
+ */
+exports.router.post(saveTvToSee, (req, res) => {
     const { body } = req;
     api.post(req.path, body).then((resp) => {
         res.send(resp.data);

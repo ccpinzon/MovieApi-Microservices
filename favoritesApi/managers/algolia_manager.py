@@ -20,9 +20,13 @@ def generate_object_id(user_id, movie_id):
     return None
 
 
-def get_movie_info(movie_id):
-    if movie_id:
-        res = requests.get("https://movieapp-microservices.appspot.com/movies/" + str(movie_id))
+def get_movie_info(movie_id, name_type):
+    if movie_id and name_type:
+        if name_type == "movie":
+            res = requests.get("https://api-gateway-dot-movieapp-microservices.appspot.com/movie/" + str(movie_id))
+        else:
+            res = requests.get("https://api-gateway-dot-movieapp-microservices.appspot.com/tv/" + str(movie_id))
+
         if res and res.json():
             print(str(res.json()))
             return res.json()
@@ -39,9 +43,10 @@ def add_movie_to_user(obj_to_save):
         try:
             user_id = str(obj_to_save['userId'])
             movie_id = str(obj_to_save['movieId'])
+            name_type = str(obj_to_save['type'])
 
             obj_to_save["objectID"] = generate_object_id(user_id, movie_id)
-            obj_to_save["movieInfo"] = get_movie_info(movie_id)
+            obj_to_save["movieInfo"] = get_movie_info(movie_id, name_type)
             index.partial_update_object(obj_to_save)
             res["code"] = "OK"
             res["message"] = "Saved Movie"
@@ -51,24 +56,26 @@ def add_movie_to_user(obj_to_save):
     return res
 
 
-def set_movie_to_see(user_id, movie_id):
+def set_movie_to_see(user_id, movie_id, name_type):
     object_to_save = None
     if (user_id is not None and user_id) and (movie_id is not None and movie_id):
         object_to_save = {
             "userId": user_id,
             "movieId": movie_id,
-            "toSee": True
+            "toSee": True,
+            "type": name_type
         }
     return add_movie_to_user(object_to_save)
 
 
-def set_movie_favorite(user_id, movie_id):
+def set_movie_favorite(user_id, movie_id, name_type):
     object_to_save = None
     if (user_id is not None and user_id) and (movie_id is not None and movie_id):
         object_to_save = {
             "userId": user_id,
             "movieId": movie_id,
-            "favorite": True
+            "favorite": True,
+            "type": name_type
         }
     return add_movie_to_user(object_to_save)
 
